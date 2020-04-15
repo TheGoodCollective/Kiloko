@@ -8,7 +8,8 @@ class YetToTest extends StatelessWidget {
   final Function goHome;
 
   YetToTest({ 
-    @required this.goCheckSymptoms, @required this.goHome });
+    @required this.goCheckSymptoms, @required this.goHome 
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -59,4 +60,5 @@ class YetToTest extends StatelessWidget {
       ),
     );
   }
+  
 }
