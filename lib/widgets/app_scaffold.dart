@@ -12,7 +12,8 @@ class AppScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
-        child: ListView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget> [
             
             appBar ?? Container(),
