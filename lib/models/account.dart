@@ -20,8 +20,9 @@ class KilokoAuthToken {
 class Account {
   String id;
   String name;
+  String password;
   String phone;
-  String nationalID;
+  int nationalID;
   String kilokoID;
   String joinedOn;
   KilokoAuthToken kilokoAuthToken;
@@ -31,6 +32,8 @@ class Account {
   Account({
     this.id,
     this.name,
+    this.password,
+    this.phone,
     this.nationalID,
     this.kilokoID,
     this.joinedOn,
