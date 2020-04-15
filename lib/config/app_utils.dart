@@ -23,3 +23,10 @@ class AppColors {
                                      .withOpacity(0.4);
 
 }
+
+
+class AppImages {
+
+  static String corona = 'assets/images/one.jpg';
+
+}
