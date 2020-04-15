@@ -52,7 +52,10 @@ class TutorialPage extends StatelessWidget {
           // subtitle
           Text(
             subTitle,
-            style: Theme.of(context).textTheme.subtitle,
+            style: Theme.of(context).textTheme.display1.copyWith(
+              fontSize: 24,
+              fontWeight: FontWeight.w400
+            ),
             textAlign: TextAlign.center,
           ),
 

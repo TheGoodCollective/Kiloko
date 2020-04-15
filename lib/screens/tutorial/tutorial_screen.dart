@@ -43,11 +43,18 @@ class _TutorialScreenState extends State<TutorialScreen> {
           
           TutorialPage(
             title: '#Bring Nomarlcy Back',
-            subTitle: 'Let’s work together to heal the world and bring normalcy',
+            subTitle: 'Let’s work together to heal the world and bring normalcy with Kiloko',
             image: 'assets/images/one.jpg',
-            cta: FloatingActionButton(
-              child: Icon(Icons.keyboard_arrow_right),
-              onPressed: ()=> this._goHome(context: context),
+            cta: Container(
+              width: 72,
+              height: 72,
+              child: FloatingActionButton(
+                child: Icon(
+                  Icons.keyboard_arrow_right,
+                  size: 36,
+                ),
+                onPressed: ()=> this._goHome(context: context),
+              ),
             ),
             screenSize: screenSize,
             color: AppColors.tertiary,
