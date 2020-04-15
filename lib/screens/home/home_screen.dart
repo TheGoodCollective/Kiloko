@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:kiloko/config/app_routes.dart';
+import 'package:kiloko/config/app_utils.dart';
 import 'package:kiloko/screens/home/home_drawer.dart';
 import 'package:latlong/latlong.dart';
 
@@ -21,12 +22,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
 
       appBar: AppBar(
-        title: this._buildExposedWidget(context: context),
+        title: this._buildUnexposedWidget(context: context),
         centerTitle: true,
         actions: <Widget>[
            
           IconButton(
-            icon: Icon(Icons.account_circle),
+            icon: Icon(
+              Icons.account_circle,
+            ),
             onPressed: this._goToAccount,
           )
 
@@ -80,16 +83,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
   
   Widget _buildUnexposedWidget({ BuildContext context }) {
+    double width = MediaQuery.of(context).size.width/3;
 
     return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          
-          Icon(Icons.check_circle_outline),
-          Text('All Good'),
+      width: width,
+      child: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            
+            Icon(
+              Icons.check_circle_outline,
+              color: AppColors.success,
+            ),
+            SizedBox(width: 14,),
+            Text(
+              'All Good',
+              style: Theme.of(context).textTheme.body2.copyWith(
+                color: AppColors.success,
+              ),
+            ),
 
-        ],
+          ],
+        ),
       ),
     );
   }// Widget _buildUnexposedWidget({ BuildContext context }) { .. }
@@ -103,9 +119,18 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           
-          Icon(Icons.info_outline),
-          SizedBox(width: 16,),
-          Text('Possible Exposure'),
+          Icon(
+            Icons.info_outline,
+            color: AppColors.warning,
+          ),
+          SizedBox(width: 14,),
+          Text(
+            'Possible Exposure',
+            style: Theme.of(context).textTheme.body2.copyWith(
+              fontWeight: FontWeight.w500,
+              color: AppColors.warning,
+            ),
+          ),
 
         ],
       ),

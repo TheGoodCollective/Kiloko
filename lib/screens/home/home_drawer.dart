@@ -13,7 +13,7 @@ class HomeDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Opacity(
-      opacity: 0.9,
+      opacity: 0.8,
       child: Drawer(
 
         elevation: 4.0,
@@ -71,7 +71,7 @@ class HomeDrawer extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: screenSize.height/10),
+              SizedBox(height: screenSize.height/30),
 
               // navigation options
 
@@ -168,8 +168,27 @@ class HomeDrawer extends StatelessWidget {
               ),
               divider(),
 
-              vSizedBox(height: 72),
+              vSizedBox(),
               
+              // about
+              ListTile(
+                leading: Icon(
+                  Icons.info,
+                  size: 40,
+                  color: AppColors.black,
+                ),
+                title: Text(
+                  'About Us',
+                  style: Theme.of(context).textTheme.body2.copyWith(
+                    fontWeight: FontWeight.w600
+                  )
+                ),
+                onTap: ()=> this.navigateTo(route: AppRoutes.ABOUT),
+              ),
+              divider(),
+
+              vSizedBox(),
+                            
               // account
               ListTile(
                 leading: Icon(
@@ -184,6 +203,27 @@ class HomeDrawer extends StatelessWidget {
                   )
                 ),
                 onTap: ()=> this.navigateTo(route: AppRoutes.ACCOUNT),
+              ),
+              divider(),
+
+              vSizedBox(height: 48),
+              
+              // i have corona
+              ListTile(
+                leading: Icon(
+                  Icons.warning,
+                  size: 40,
+                  color: AppColors.warning,
+                ),
+                title: Text(
+                  'I have corona',
+                  style: Theme.of(context).textTheme.body2.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.warning,
+                  ),
+                  
+                ),
+                onTap: ()=> this.navigateTo(route: AppRoutes.I_HAVE_CORONA),
               ),
 
             ],
