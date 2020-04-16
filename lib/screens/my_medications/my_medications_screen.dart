@@ -12,8 +12,8 @@ class MyMedicationsScreen extends StatefulWidget {
 }
 
 class _MyMedicationsScreenState extends State<MyMedicationsScreen> {
-  List<Medication> _medications = [];
-  List<Medication> _medicationz = [
+  // List<Medication> _medications = [];
+  List<Medication> _medications = [
     Medication(
       name: 'Brufen',
       reason: 'Headache',

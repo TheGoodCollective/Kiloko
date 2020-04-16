@@ -72,7 +72,7 @@ class MyMedicationCard extends StatelessWidget {
               children: <Widget>[
 
                 Container(
-                  width: screenSize.width-160,
+                  width: screenSize.width-200,
                   child: 
                     // name and icon
                     Row(

@@ -131,6 +131,38 @@ class _AccountScreenState extends State<AccountScreen> {
 
           SizedBox(height: 28),
 
+          // view my medications
+          ListTile(
+            trailing: Icon(
+              Icons.keyboard_arrow_right, size: 30,
+              color: AppColors.sucsess,
+            ),
+            title: Text(
+              account.kilokoID ?? '',
+              style: Theme.of(context).textTheme.body1.copyWith(
+                color: AppColors.sucsess,
+              ),
+            ),
+            contentPadding: EdgeInsets.only(left: 40),
+          ),
+
+          // view my conditions
+          ListTile(
+            trailing: Icon(
+              Icons.keyboard_arrow_right, size: 30,
+              color: AppColors.sucsess,
+            ),
+            title: Text(
+              account.kilokoID ?? '',
+              style: Theme.of(context).textTheme.body1.copyWith(
+                color: AppColors.sucsess,
+              ),
+            ),
+            contentPadding: EdgeInsets.only(left: 40),
+          ),
+
+          SizedBox(height: 40),
+
           // signout
           Center(
             child: Container(
