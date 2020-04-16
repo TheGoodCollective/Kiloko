@@ -51,9 +51,9 @@ class AppRoutes {
         // screen = IHaveCoronaScreen();
         // screen = SymptomsCheckScreen();
 
-        // screen = AddConditionsAndMedicationsScreen();
+        screen = AddConditionsAndMedicationsScreen();
         // screen = MyConditionsScreen();
-        screen = MyMedicationsScreen();
+        // screen = MyMedicationsScreen();
         break;
 
       // tutorial
