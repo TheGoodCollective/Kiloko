@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+
+// screens
 import 'package:kiloko/screens/about/about.dart';
 import 'package:kiloko/screens/account/account.dart';
 import 'package:kiloko/screens/add_conditions_and_medications/add_conditions_and_medications_screen.dart';
 import 'package:kiloko/screens/home/home_screen.dart';
 import 'package:kiloko/screens/i_have_corona/i_have_corona_screen.dart';
 import 'package:kiloko/screens/login/login_screen.dart';
+import 'package:kiloko/screens/my_conditions/my_conditions_screen.dart';
+import 'package:kiloko/screens/my_medications/my_medications_screen.dart';
 import 'package:kiloko/screens/policies/policies_screen.dart';
 import 'package:kiloko/screens/protection/protection_screen.dart';
 import 'package:kiloko/screens/register/register_screen.dart';
@@ -24,6 +28,8 @@ class AppRoutes {
   static const String POLICIES = '/policies';
 
   static const String ADD_CONDITIONS_AND_MEDICATION = '/add-conditions-and-medications';
+  static const String MY_CONDITIONS = '/my-conditions';
+  static const String MY_MEDICATION = '/my-medications';
   
   static const String I_HAVE_CORONA = '/i-have-corona';
 
@@ -41,9 +47,13 @@ class AppRoutes {
     switch (screenName) {
       // tutorial
       case AppRoutes.BASE:
-        screen = TutorialScreen();
+        // screen = TutorialScreen();
         // screen = IHaveCoronaScreen();
         // screen = SymptomsCheckScreen();
+
+        // screen = AddConditionsAndMedicationsScreen();
+        // screen = MyConditionsScreen();
+        screen = MyMedicationsScreen();
         break;
 
       // tutorial
@@ -84,6 +94,16 @@ class AppRoutes {
       // add conditions & medications
       case AppRoutes.ADD_CONDITIONS_AND_MEDICATION:
         screen = AddConditionsAndMedicationsScreen();
+        break;
+
+      // show user conditions
+      case AppRoutes.MY_CONDITIONS:
+        screen = MyConditionsScreen();
+        break;
+
+      // show user medications
+      case AppRoutes.MY_MEDICATION:
+        screen = MyMedicationsScreen();
         break;
         
       // i have corona

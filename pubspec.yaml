@@ -32,6 +32,7 @@ dependencies:
   regexed_validator: ^1.0.2
   firebase_auth: ^0.15.5+3
   firebase: ^7.2.1
+  jiffy: ^3.0.1
 
 dev_dependencies:
   flutter_test:
