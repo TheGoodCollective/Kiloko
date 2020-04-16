@@ -6,12 +6,16 @@ class Condition {
   String name;
   String description;
   bool isTerminal = false;
+  DateTime fromWhen;
+  DateTime toWhen;
   List<Medication> medications = [];
 
   Condition({ 
     @required this.name, 
     this.description, 
     this.isTerminal, 
-    this.medications 
+    this.medications,
+    this.toWhen,
+    this.fromWhen,
   });
 }
