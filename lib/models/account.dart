@@ -29,6 +29,9 @@ class Account {
   List<Condition> conditions = [];
   List<Medication> medications = [];
 
+  double isSynced;
+  String cloudID;
+
   Account({
     this.id,
     this.name,
@@ -40,5 +43,7 @@ class Account {
     this.conditions,
     this.medications,
     this.kilokoAuthToken,
+    this.isSynced,
+    this.cloudID,
   });
 }
