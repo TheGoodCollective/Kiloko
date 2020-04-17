@@ -6,11 +6,11 @@ import 'package:kiloko/services/local_db_service.dart';
 import 'package:sqflite/sqflite.dart';
 
 
-class LocalConditionService {
+class LocalMedicationService {
   Database _dbService;
   String _table = 'conditions';
 
-  LocalConditionService() {
+  LocalMedicationService() {
     this._getConnection();
   }
   
@@ -66,5 +66,15 @@ class LocalConditionService {
     }).toList();
     return medications;
   }// Future<List<KilokoLocation>> all() { .. }
+
+
+
+
+  // sync data with the server
+  void syncData() {
+    print('sync data');
+  }// void syncData() { .. }
+
+
 
 }

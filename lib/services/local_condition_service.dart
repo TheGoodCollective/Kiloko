@@ -66,4 +66,13 @@ class LocalConditionService {
     return conditions;
   }// Future<List<KilokoLocation>> all() { .. }
 
+
+
+  // sync data with the server
+  void syncData() {
+    print('sync data');
+  }// void syncData() { .. }
+
+
+
 }

@@ -67,4 +67,12 @@ class LocalLocationService {
 
 
 
+
+  // sync data with the server
+  void syncData() {
+    print('sync data');
+  }// void syncData() { .. }
+
+
+  
 }

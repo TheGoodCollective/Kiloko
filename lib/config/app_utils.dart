@@ -30,3 +30,16 @@ class AppImages {
   static String corona = 'assets/images/one.jpg';
 
 }
+
+class SharedPreferenceVars {
+  static final String accountID = 'kiloko:kilokoID';
+  static final String accountName = 'kiloko:accountName';
+  static final String accountPhone = 'kiloko:accountPhone';
+  static final String accountJoinedOn = 'kiloko:accountJoinedOn';
+  static final String accountIsAuthenticated = 'kiloko:accountIsAuthenticated';
+  static final String accountAccessToken = 'kiloko:accountAccessToken';
+  static final String accountAccessTokenExpiry = 'kiloko:accountAccessTokenExpiry';
+  static final String accountAccessTokenOfferedOn = 'kiloko:accountAccessTokenOfferedOn';
+
+
+}
