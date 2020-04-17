@@ -3,6 +3,7 @@ import 'package:kiloko/models/medication.dart';
 
 
 class Condition {
+  int id;
   String name;
   String description;
   bool isTerminal = false;
@@ -13,6 +14,7 @@ class Condition {
   String cloudID;
 
   Condition({ 
+    this.id,
     @required this.name, 
     this.description, 
     this.isTerminal, 
@@ -27,6 +29,7 @@ class Condition {
   static Condition fromMap({ Map<String, dynamic> condition }) {
 
     return Condition(
+      id: condition['id'],
       name: condition['name'],
       fromWhen: condition['fromWhen'],
       toWhen: condition['toWhen'],
@@ -39,6 +42,7 @@ class Condition {
   static Map<String, dynamic> toMap({ Condition condition }) {
 
     return {
+      'id': condition.id,
       'name': condition.name,
       'fromWhen': condition.fromWhen,
       'toWhen': condition.toWhen,

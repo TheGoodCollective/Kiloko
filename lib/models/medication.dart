@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kiloko/models/condition.dart';
 
 class Medication {
+  int id;
   String name;
   Condition condition;
   DateTime fromWhen;
@@ -11,6 +12,7 @@ class Medication {
   String cloudID;
 
   Medication({ 
+    this.id,
     @required this.name, 
     this.condition, 
     this.fromWhen, 
@@ -24,6 +26,7 @@ class Medication {
   static Medication fromMap({ Map<String, dynamic> medication }) {
 
     return Medication(
+      id: medication['id'] ?? null,
       name: medication['name'],
       reason: medication['reason'],
       fromWhen: medication['fromWhen'],
@@ -37,6 +40,7 @@ class Medication {
   static Map<String, dynamic> toMap({ Medication medication }) {
 
     return {
+      'id': medication.id,
       'name': medication.name,
       'reason': medication.reason,
       'fromWhen': medication.fromWhen,
