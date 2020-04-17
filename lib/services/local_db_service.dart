@@ -85,6 +85,9 @@ class LocalDBService {
     );
 
   }// _onCreateDb(Database db, int version) async { .. }
+  
 
+  @override 
+  void dispose() { }// void dispose() { .. }
 
 }
