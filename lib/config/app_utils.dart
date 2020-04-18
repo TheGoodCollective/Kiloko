@@ -33,7 +33,8 @@ class AppImages {
 
 class SharedPreferenceVars {
   static final String hasAlreadyVisited = 'kiloko:alreadyVisited';
-  static final String accountID = 'kiloko:kilokoID';
+  static final String kilokoID = 'kiloko:kilokoID';
+  static final String accountID = 'kiloko:accountID';
   static final String accountName = 'kiloko:accountName';
   static final String accountPhone = 'kiloko:accountPhone';
   static final String accountJoinedOn = 'kiloko:accountJoinedOn';
