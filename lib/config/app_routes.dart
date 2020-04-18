@@ -47,11 +47,11 @@ class AppRoutes {
     switch (screenName) {
       // tutorial
       case AppRoutes.BASE:
-        // screen = TutorialScreen();
+        screen = TutorialScreen();
         // screen = IHaveCoronaScreen();
         // screen = SymptomsCheckScreen();
 
-        screen = AddConditionsAndMedicationsScreen();
+        // screen = AddConditionsAndMedicationsScreen();
         // screen = MyConditionsScreen();
         // screen = MyMedicationsScreen();
         break;

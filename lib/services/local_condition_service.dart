@@ -67,7 +67,7 @@ class LocalConditionService {
   }// Future<List<KilokoLocation>> all() { .. }
 
   
-  void delete({ Condition condition }) async {
+  Future<void> delete({ Condition condition }) async {
     await _dbService.delete(
       _table, where: "id = ?", whereArgs: [ condition.id ]
     );

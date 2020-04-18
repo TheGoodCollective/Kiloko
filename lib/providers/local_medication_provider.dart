@@ -3,7 +3,8 @@ import 'package:kiloko/models/medication.dart';
 import 'package:kiloko/services/local_medication_service.dart';
 
 
-class LocalMedicationProvider extends ChangeNotifier {
+class LocalMedicationProvider with
+ ChangeNotifier {
   List<Medication> _medications = [];
   bool _isLoading = false;
   LocalMedicationService _localMedicationService;
@@ -56,7 +57,7 @@ class LocalMedicationProvider extends ChangeNotifier {
     this._isLoading = true;
     notifyListeners();
 
-    _localMedicationService.delete( medication: medication, );
+    await _localMedicationService.delete( medication: medication, );
     
     this._isLoading = false;
     this._medications = this.medications.where((Medication med) {

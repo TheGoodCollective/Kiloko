@@ -10,7 +10,7 @@ class LocalAccountService {
 
 
 
-  void newAccount() async {
+  static Future<void> newAccount() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     String accountCode = UtilsService.generateCode(length: 7);

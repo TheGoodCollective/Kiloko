@@ -68,7 +68,7 @@ class LocalMedicationService {
   }// Future<List<KilokoLocation>> all() { .. }
   
   
-  void delete({ Medication medication }) async {
+  Future<void> delete({ Medication medication }) async {
     await _dbService.delete(
       _table, where: "id = ?", whereArgs: [ medication.id ]
     );

@@ -3,7 +3,7 @@ import 'package:kiloko/models/condition.dart';
 import 'package:kiloko/services/local_condition_service.dart';
 
 
-class LocalConditionProvider extends ChangeNotifier {
+class LocalConditionProvider with ChangeNotifier {
   List<Condition> _conditions = [];
   bool _isLoading = false;
   LocalConditionService _localConditionService;
@@ -56,7 +56,7 @@ class LocalConditionProvider extends ChangeNotifier {
     this._isLoading = true;
     notifyListeners();
 
-    _localConditionService.delete( condition: condition, );
+    await _localConditionService.delete( condition: condition, );
     
     this._isLoading = false;
     this._conditions = this._conditions.where((Condition cond) {

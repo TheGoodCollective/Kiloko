@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kiloko/config/app_routes.dart';
 import 'package:kiloko/config/app_utils.dart';
 import 'package:kiloko/screens/tutorial/tutorial_page.dart';
+import 'package:kiloko/services/local_account_service.dart';
 
 
 
@@ -67,7 +68,8 @@ class _TutorialScreenState extends State<TutorialScreen> {
   }// Widget build(BuildContext context) { .. }
 
 
-  void _goHome({ BuildContext context }) {
+  void _goHome({ BuildContext context }) async {
+    await LocalAccountService.newAccount();
     Navigator.of(context).pushReplacementNamed(AppRoutes.HOME);
   }// void _goHome({ BuildContext context }) { .. }
 }
