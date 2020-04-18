@@ -2,8 +2,9 @@ import 'package:dot_pagination_swiper/dot_pagination_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:kiloko/config/app_routes.dart';
 import 'package:kiloko/config/app_utils.dart';
+import 'package:kiloko/providers/local_account_provider.dart';
 import 'package:kiloko/screens/tutorial/tutorial_page.dart';
-import 'package:kiloko/services/local_account_service.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -13,9 +14,12 @@ class TutorialScreen extends StatefulWidget {
 }
 
 class _TutorialScreenState extends State<TutorialScreen> {
+  LocalAccountProvider _localAccountProvider;
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
+    _localAccountProvider = Provider.of<LocalAccountProvider>(context, listen: false);
 
     return Scaffold(
 
@@ -69,7 +73,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
 
 
   void _goHome({ BuildContext context }) async {
-    await LocalAccountService.newAccount();
+    await _localAccountProvider.newAccount();
     Navigator.of(context).pushReplacementNamed(AppRoutes.HOME);
   }// void _goHome({ BuildContext context }) { .. }
 }

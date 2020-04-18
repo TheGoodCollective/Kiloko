@@ -17,7 +17,7 @@ class LocalAccountService {
 
     String existingCode = await sharedPreferences.getString(SharedPreferenceVars.accountID);
 
-    if( existingCode.isNotEmpty ) {
+    if( existingCode != null ) {
       await sharedPreferences.setString(
         SharedPreferenceVars.accountID, accountCode
       );

@@ -50,13 +50,16 @@ class TutorialPage extends StatelessWidget {
           SizedBox( height: screenSize.height/40, ),
 
           // subtitle
-          Text(
-            subTitle,
-            style: Theme.of(context).textTheme.display1.copyWith(
-              fontSize: 24,
-              fontWeight: FontWeight.w400
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              subTitle,
+              style: Theme.of(context).textTheme.display1.copyWith(
+                fontSize: 22,
+                fontWeight: FontWeight.w400
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
           ),
 
           SizedBox( height: screenSize.height/20, ),
