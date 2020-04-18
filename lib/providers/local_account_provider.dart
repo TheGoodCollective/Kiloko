@@ -34,4 +34,9 @@ class LocalAccountProvider with ChangeNotifier {
     return null;
   }// Future<Account> _getAccount() async { .. }
 
+  // create a new kiloko account
+  Future<void> newAccount() async {
+    await LocalAccountService.newAccount();
+  }// void newAccount() async { .. }
+
 }
