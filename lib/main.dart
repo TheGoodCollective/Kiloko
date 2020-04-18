@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kiloko/config/app_routes.dart';
 import 'package:kiloko/config/app_utils.dart';
+import 'package:kiloko/providers/local_account_provider.dart';
 import 'package:kiloko/providers/local_condition_provider.dart';
 import 'package:kiloko/providers/local_medication_provider.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,11 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
 
       providers: [
+
+        // account
+        ChangeNotifierProvider<LocalAccountProvider>(
+          create: (BuildContext contxt)=> LocalAccountProvider()
+        ),
 
         // medication
         ChangeNotifierProvider<LocalMedicationProvider>(
