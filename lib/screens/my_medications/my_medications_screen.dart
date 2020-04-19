@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kiloko/config/app_utils.dart';
 import 'package:kiloko/models/medication.dart';
-import 'package:kiloko/screens/my_medications/my_medication_card.dart';
+import 'package:kiloko/providers/local_medication_provider.dart';
+import 'package:kiloko/screens/my_medications/add_medication_widget.dart';
+import 'package:kiloko/screens/my_medications/medication_list_widget.dart';
+import 'package:kiloko/screens/my_medications/no_medication_widget.dart';
 import 'package:kiloko/widgets/app_scaffold.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -31,10 +34,12 @@ class _MyMedicationsScreenState extends State<MyMedicationsScreen> {
       toWhen: DateTime.now().subtract(Duration(days: 1))
     ),
   ];
+  LocalMedicationProvider _localMedicationProvider;
 
   @override
   Widget build(BuildContext context) {
      Size screenSize = MediaQuery.of(context).size;
+     _localMedicationProvider = Provider.of<LocalMedicationProvider>(context, listen: false);
 
     return Scaffold(
 
@@ -46,10 +51,26 @@ class _MyMedicationsScreenState extends State<MyMedicationsScreen> {
       body: AppScaffold(
         children: <Widget>[
           
-          _medications.length > 0 
-            ? _buildMedicationsList(context: context)
-            : _buildNoMedicationsList(context: context),
+          Consumer<LocalMedicationProvider> (
+            builder: (BuildContext ctx, LocalMedicationProvider medicationProvider, _) {
 
+              return medicationProvider.medications.length > 0 
+                ? 
+                MedicationsList(
+                  medications: medicationProvider.medications,
+                  deleteMedication: this._deleteMedication,
+                )
+                : 
+                NoMedicationWidget(goViewWhy: this._goViewWhy,);
+
+            },
+          ),
+          // _medications.length > 0 
+          //   ? MedicationsList(
+          //       medications: this._medications,
+          //       deleteMedication: this._deleteMedication,
+          //     )
+          //   : NoMedicationWidget(goViewWhy: this._goViewWhy,),
 
         ],
       ),
@@ -66,103 +87,6 @@ class _MyMedicationsScreenState extends State<MyMedicationsScreen> {
 
 
 
-  
-  Widget _buildMedicationsList({ BuildContext context }) {
-    Size screenSize = MediaQuery.of(context).size;
-
-    return Container(
-      padding: EdgeInsets.only(left: 16, right: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          
-          SizedBox(height: 40,),
-                                
-          ..._medications.map((Medication med) {
-
-            return MyMedicationCard(
-              medication: med,
-              onTap: () {},
-              deleteCallBack: this._deleteMedication,
-              showDeleteIcon: true,
-            );
-          }).toList(),
-
-        ],
-      ),
-    );
-  }// Widget _buildMedicationsList({ BuildContext context }) { .. }
-
-  // show when user has no medicines
-  Widget _buildNoMedicationsList({ BuildContext context }) {
-    Size screenSize = MediaQuery.of(context).size;
-
-    return Container(
-      padding: EdgeInsets.only(left: 16, right: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-
-          SizedBox(height: screenSize.height/8),
-          
-          Center(
-            child: CircleAvatar(
-              radius: screenSize.width/6,
-              backgroundImage: AssetImage(AppImages.corona),
-            ),
-          ),
-
-          SizedBox(height: 56,),
-
-          Center(
-            child: Text(
-              'No Medications',
-              style: Theme.of(context).textTheme.title,
-            ),
-          ),
-
-          SizedBox(height: 32,),
-          
-          Text(
-            'Incase you are taking any medications, click below button to add it. Your medications will appear here',
-            style: Theme.of(context).textTheme.body2,
-            textAlign: TextAlign.center,
-          ),
- 
-          SizedBox(height: 80,),
-          
-          GestureDetector(
-
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                
-                Icon(
-                  Icons.info,
-                  color: AppColors.primary,
-                ),
-
-                SizedBox(width: 8,),
-                
-                Text(
-                  'Why should I add',
-                  style: Theme.of(context).textTheme.body1.copyWith(
-                    color: AppColors.primary,
-                  )
-                ),
-
-              ],
-            ),
-
-            onTap: this._goViewWhy,
-          ),
-
-        ],
-      ),
-    );
-  }// Widget _buildNoMedicationsList({ BuildContext context }) { .. }
-
-
 
 
   /*
@@ -175,11 +99,22 @@ class _MyMedicationsScreenState extends State<MyMedicationsScreen> {
   }// void _goViewWhy() { .. }
   
   bool _deleteMedication({ Medication medication }) {
-
+    _localMedicationProvider.delete(medication: medication);
   }// bool _deleteMedication({ Medication medication }) { .. }
   
   void _goAddMedication() {
-
+    showDialog(
+      context: context,
+      builder: (BuildContext ctx)=> 
+                  Dialog(
+                    child: SingleChildScrollView(
+                      child: AddMedicationWidget(),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                  ),
+    );
   }// void _goAddMedication() { .. }
 
 }
