@@ -13,15 +13,15 @@ class LocalAccountService {
   static Future<void> newAccount() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    String accountCode = UtilsService.generateCode(length: 7);
-
-    String existingCode = await sharedPreferences.getString(SharedPreferenceVars.accountID);
-
-    if( existingCode != null ) {
+    String accountCode = UtilsService.generateCode(length: 1);
+print('KilokoID $accountCode');
+    String existingCode = sharedPreferences.getString(SharedPreferenceVars.kilokoID);
+print('existingCode $existingCode');
+    // if( existingCode == null ) {
       await sharedPreferences.setString(
-        SharedPreferenceVars.accountID, accountCode
+        SharedPreferenceVars.kilokoID, null
       );
-    }
+    // }
   }// void newAccount() async { .. }
 
 }

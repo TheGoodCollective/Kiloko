@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:kiloko/models/condition.dart';
-import 'package:kiloko/models/kiloko_location.dart';
 import 'package:kiloko/models/medication.dart';
 import 'package:kiloko/services/local_db_service.dart';
+import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 
 class LocalMedicationService {
   Database _dbService;
-  String _table = 'conditions';
+  String _table = 'medications';
 
   LocalMedicationService() {
     this._getConnection();
@@ -16,6 +15,7 @@ class LocalMedicationService {
   
   // get db connection
   _getConnection() async {
+    print('init med data now');
     LocalDBService service = LocalDBService();
     _dbService = await service.localDb;
   }// _getConnection() async { .. }
@@ -24,13 +24,22 @@ class LocalMedicationService {
 
   // add 
   Future<int> add({Map<String, dynamic> medication}) async {
-    int id = await _dbService.insert(_table, medication);
-    return id;
+    if(_dbService == null) { await _getConnection(); }
+    
+    try {
+      int id = await _dbService.insert(_table, medication);
+      return id;
+    } catch(e) {
+      print('add service error ${e.toString()}');  
+    }
+    return null;
   }// Future<int> add({Map<String, dynamic> medication}) async { .. }
 
 
   // update sync status
   Future<void> update({ Map<String, dynamic> medication }) async {
+    if(_dbService == null) { await _getConnection(); }
+
     await _dbService.update(
       _table, medication, 
       where: "id = ?", whereArgs: [ medication['id'] ]
@@ -40,6 +49,8 @@ class LocalMedicationService {
 
   // get all
   Future<List<Medication>> all() async {
+    if(_dbService == null) { await _getConnection(); }
+
     List<Medication> medications = [];
     List<Map<String, dynamic>> medicationRes = await _dbService.query(_table);
 
@@ -54,6 +65,8 @@ class LocalMedicationService {
 
   // get all by synced
   Future<List<Medication>> allSyncIs({ @required bool syncStatus }) async {
+    if(_dbService == null) { await _getConnection(); }
+
     List<Medication> medications = [];
     List<Map<String, dynamic>> medicationsRes = await _dbService.query(
       _table, where: "isSynced = ?", whereArgs: [ syncStatus ]
@@ -69,6 +82,8 @@ class LocalMedicationService {
   
   
   Future<void> delete({ Medication medication }) async {
+    if(_dbService == null) { await _getConnection(); }
+
     await _dbService.delete(
       _table, where: "id = ?", whereArgs: [ medication.id ]
     );

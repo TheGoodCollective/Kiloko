@@ -21,8 +21,7 @@ class LocalDBService {
   Future<Database> get localDb async {
     if( _localDB != null ) return _localDB;
     
-    Database db = await _initLocalDb();
-    _localDB = db;
+    _localDB = await _initLocalDb();
     return _localDB;
   }// Future<Database> get localDb async { .. } 
 
@@ -41,48 +40,58 @@ class LocalDBService {
   _onCreateDb(Database db, int version) async {
     
     // store user locations
-    await db.execute(
-      '''
-        CREATE TABLE locations (
-          id INTEGER PRIMARY KEY,
-          lat DOUBLE(10, 8),
-          lng DOUBLE(10, 8),
-          isSynced BOOLEAN DEFAULT FALSE,
-          cloudID STRING,
-        )
-      '''
-    );
+    try {
+      await db.execute(
+        '''
+          CREATE TABLE locations (
+            id INTEGER PRIMARY KEY,
+            lat DOUBLE(10, 8),
+            lng DOUBLE(10, 8),
+            isSynced BOOLEAN DEFAULT 0,
+            cloudID TEXT
+          );
+        '''
+      );
+    } catch(e) {
+      print('error >>> ${e.toString()}');
+    }
 
     // store user medications
-    await db.execute(
-      '''
-        CREATE TABLE medications (
-          id INTEGER PRIMARY KEY,
-          name TEXT,
-          reason TEXT,
-          fromWhen DATETIME,
-          toWhen DATETIME,
-          isSynced BOOLEAN DEFAULT FALSE,
-          cloudID STRING,
-        )
-      '''
-    );
+    try{
+      await db.execute(
+        '''
+          CREATE TABLE medications (
+            id INTEGER PRIMARY KEY,
+            name TEXT,
+            reason TEXT,
+            fromWhen DATETIME,
+            toWhen DATETIME,
+            isSynced BOOLEAN DEFAULT 0,
+            cloudID TEXT
+          );
+        '''
+      );
+    } catch(e) {
+      print('error >>> ${e.toString()}');
+    }
     
     // store user conditions
-    await db.execute(
-      '''
-        CREATE TABLE conditions (
-          id INTEGER PRIMARY KEY,
-          name TEXT,
-          reason TEXT,
-          fromWhen DATETIME,
-          toWhen DATETIME,
-          medications TEXT,
-          isSynced BOOLEAN DEFAULT FALSE,
-          cloudID STRING,
-        )
-      '''
-    );
+    try {
+      await db.execute(
+        '''
+          CREATE TABLE conditions (
+            id INTEGER PRIMARY KEY,
+            name TEXT,
+            reason TEXT,
+            fromWhen DATETIME,
+            toWhen DATETIME,
+            medications TEXT,
+            isSynced BOOLEAN DEFAULT 0,
+            cloudID TEXT
+          );
+        '''
+      );
+    } catch(e) {}
 
   }// _onCreateDb(Database db, int version) async { .. }
   
