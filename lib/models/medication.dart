@@ -29,8 +29,10 @@ class Medication {
       id: medication['id'] ?? null,
       name: medication['name'],
       reason: medication['reason'],
-      fromWhen: medication['fromWhen'],
-      toWhen: medication['toWhen'],
+      fromWhen: medication['fromWhen'] != null 
+                  ? DateTime.parse(medication['fromWhen']) : null,
+      toWhen: medication['toWhen'] != null 
+                ? DateTime.parse(medication['toWhen']) : null,
       isSynced: medication['isSynced'],
       cloudID: medication['cloudID'],
     );
@@ -43,8 +45,10 @@ class Medication {
       'id': medication.id,
       'name': medication.name,
       'reason': medication.reason,
-      'fromWhen': medication.fromWhen,
-      'toWhen': medication.toWhen,
+      'fromWhen': medication.fromWhen != null 
+                   ? medication.fromWhen.toString() : null,
+      'toWhen': medication.toWhen != null 
+                  ? medication.toWhen.toString() : null,
       'isSynced': medication.isSynced,
       'cloudID': medication.cloudID,
     };
