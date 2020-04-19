@@ -130,7 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
                         ),
                         validator: this._kilokoIDValidator,
-                        onSaved: (String val)=> this._account.kilokoID = val,
+                        onSaved: (String val)=> this._account.kilokoID = int.parse(val),
                       ),
 
                       SizedBox(height: 28),

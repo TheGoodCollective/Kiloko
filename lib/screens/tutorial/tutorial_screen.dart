@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dot_pagination_swiper/dot_pagination_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:kiloko/config/app_routes.dart';
@@ -15,6 +17,12 @@ class TutorialScreen extends StatefulWidget {
 
 class _TutorialScreenState extends State<TutorialScreen> {
   LocalAccountProvider _localAccountProvider;
+
+  @override
+  void initState() {
+    super.initState();
+  }// void initState() { .. }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +82,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
 
   void _goHome({ BuildContext context }) async {
     await _localAccountProvider.newAccount();
+    await _localAccountProvider.setIsSynced(isSynced: false);
     Navigator.of(context).pushReplacementNamed(AppRoutes.HOME);
   }// void _goHome({ BuildContext context }) { .. }
 }

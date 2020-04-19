@@ -239,6 +239,8 @@ class _AddMedicationWidgetState extends State<AddMedicationWidget> {
       setState(() {
         _medication = Medication(name: '');
       });
+
+      Navigator.of(context).pop();
     }
     
   }// void _addMedication({ BuildContext context }) { .. }

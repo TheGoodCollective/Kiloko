@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 // screens
 import 'package:kiloko/screens/about/about.dart';
-import 'package:kiloko/screens/account/account.dart';
+import 'package:kiloko/screens/account/account_screen.dart';
 import 'package:kiloko/screens/add_conditions_and_medications/add_conditions_and_medications_screen.dart';
 import 'package:kiloko/screens/home/home_screen.dart';
 import 'package:kiloko/screens/i_have_corona/i_have_corona_screen.dart';
@@ -54,6 +54,7 @@ class AppRoutes {
         // screen = AddConditionsAndMedicationsScreen();
         // screen = MyConditionsScreen();
         // screen = MyMedicationsScreen();
+        // screen = AccountScreen();
         break;
 
       // tutorial
