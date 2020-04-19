@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kiloko/config/app_utils.dart';
 import 'package:kiloko/models/account.dart';
 import 'package:kiloko/services/local_account_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 
 
 class LocalAccountProvider with ChangeNotifier {
-  Account _account;
+  Account _account = Account();
   LocalAccountService _localAccountService;
 
   LocalAccountProvider() {
@@ -20,24 +18,21 @@ class LocalAccountProvider with ChangeNotifier {
   Account get account=> this._account;
 
 
-  Future<Account> _getAccount() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-
-    try {
-      String kilokoID = sharedPreferences.getString(SharedPreferenceVars.kilokoID);
-      print('Future<Account> _getAccount() $kilokoID');
-      this._account = Account(kilokoID: kilokoID);
-    } catch (e) {
-    }
-
-
+  Future<void> _getAccount() async {
+    this._account = await this._localAccountService.getAccount();
+    print('Future<void> _getAccount() async { in provdr');
+    print(this._account);
     notifyListeners();
-    return null;
   }// Future<Account> _getAccount() async { .. }
 
   // create a new kiloko account
   Future<void> newAccount() async {
     await LocalAccountService.newAccount();
   }// void newAccount() async { .. }
+
+  // delete account 
+  Future<void> deleteAccount() async {
+    await _localAccountService.deleteAccount();
+  }// Future<void> deleteAccount({ Acccount acccount }) { .. }
 
 }
