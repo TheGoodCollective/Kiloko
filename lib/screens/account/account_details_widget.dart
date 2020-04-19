@@ -76,7 +76,7 @@ class AccountDetailsWidget extends StatelessWidget {
               color: AppColors.sucsess,
             ),
             title: Text(
-              account.kilokoID ?? '',
+              account.kilokoID.toString() ?? '',
               style: Theme.of(context).textTheme.body1.copyWith(
                 color: AppColors.sucsess,
               )

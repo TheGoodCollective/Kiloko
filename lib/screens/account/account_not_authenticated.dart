@@ -120,7 +120,7 @@ class AccountNotAuthenticated extends StatelessWidget {
         SizedBox(height: 16),
         
         Text(
-          account.kilokoID,
+          account.kilokoID.toString(),
           style: Theme.of(context).textTheme.body2.copyWith(
             fontWeight: FontWeight.w600
           ),

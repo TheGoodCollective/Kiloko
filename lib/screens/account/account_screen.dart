@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:kiloko/config/app_routes.dart';
 import 'package:kiloko/config/app_utils.dart';
 import 'package:kiloko/models/account.dart';
+import 'package:kiloko/providers/local_account_provider.dart';
 import 'package:kiloko/screens/account/account_details_widget.dart';
 import 'package:kiloko/screens/account/account_not_authenticated.dart';
 import 'package:kiloko/widgets/app_scaffold.dart';
+import 'package:provider/provider.dart';
 
 
 class AccountScreen extends StatefulWidget {
@@ -15,15 +17,12 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  bool _hasUser = true;
-  Account _account = Account(
-    name: 'Emily Blake', phone: '+185948985893',
-    kilokoID: 'itjfnfievretge', nationalID: 95673798,
-  );
+  LocalAccountProvider _localAccountProvider;
 
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
+    _localAccountProvider = Provider.of<LocalAccountProvider>(context);
 
     return Scaffold(
 
@@ -35,24 +34,31 @@ class _AccountScreenState extends State<AccountScreen> {
       body: AppScaffold(
         children: <Widget>[
           
-          _hasUser
-            ? AccountDetailsWidget(
-                account: _account,
-                signOut: this._signOut,
-                updateAcount: this._updateAcount,
-                deleteAccount: this._deleteAccount,
-                goViewMyConditions: this._goViewMyConditions,
-                goViewMyMedications: this._goViewMyMedications,
-              )
-            :
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: screenSize.width/10),
-              child: AccountNotAuthenticated(
-                account: _account,
-                goLoginCallback: this._goLogin,
-                goRegisterCallback: this._goRegister,
-              ),
-            ),
+          Consumer<LocalAccountProvider> (
+            builder: (BuildContext ctx, LocalAccountProvider accountProvider, _) {
+
+              return
+                accountProvider.account != null && 
+                accountProvider.account.isSynced != null && accountProvider.account.isSynced 
+                ? AccountDetailsWidget(
+                    account: accountProvider.account,
+                    signOut: this._signOut,
+                    updateAcount: this._updateAcount,
+                    deleteAccount: this._deleteAccount,
+                    goViewMyConditions: this._goViewMyConditions,
+                    goViewMyMedications: this._goViewMyMedications,
+                  )
+                : Container(
+                    margin: EdgeInsets.symmetric(horizontal: screenSize.width/10),
+                    child: AccountNotAuthenticated(
+                      account: accountProvider.account,
+                      goLoginCallback: this._goLogin,
+                      goRegisterCallback: this._goRegister,
+                    ),
+                  );
+
+            }
+          ),
 
         ],
       ),
@@ -86,10 +92,12 @@ class _AccountScreenState extends State<AccountScreen> {
 
   void _deleteAccount({ BuildContext context }) {
     print('delete account');
+    _localAccountProvider.deleteAccount();
   }
   
   void _signOut({ BuildContext context }) {
     print('sign out');
+    this._deleteAccount();
   }
 
   void _updateAcount({ BuildContext context }) {
