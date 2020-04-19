@@ -33,12 +33,22 @@ class AppImages {
 
 class SharedPreferenceVars {
   static final String hasAlreadyVisited = 'kiloko:alreadyVisited';
+  
+  static final String isSynced = 'kiloko:isAccountSynced';
+  static final String lastSyncTime = 'kiloko:lastAccountSyncTime';
+  
+  static final String cloudID = 'kiloko:cloudID';
   static final String kilokoID = 'kiloko:kilokoID';
   static final String accountID = 'kiloko:accountID';
+  static final String accountNationalID = 'kiloko:nationalID';
+
   static final String accountName = 'kiloko:accountName';
   static final String accountPhone = 'kiloko:accountPhone';
   static final String accountJoinedOn = 'kiloko:accountJoinedOn';
+  
   static final String accountIsAuthenticated = 'kiloko:accountIsAuthenticated';
+  static final String isAccountAuthenticated = 'kiloko:accountIsAuthenticated';
+
   static final String accountAccessToken = 'kiloko:accountAccessToken';
   static final String accountAccessTokenExpiry = 'kiloko:accountAccessTokenExpiry';
   static final String accountAccessTokenOfferedOn = 'kiloko:accountAccessTokenOfferedOn';
