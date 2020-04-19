@@ -23,12 +23,18 @@ class LocalMedicationProvider with
 
   // add 
   void add({ Medication medication }) async {
-    this._isLoading = true;
+    this._isLoading = false;
     notifyListeners();
 
     int id = await _localMedicationService.add(
       medication: Medication.toMap(medication: medication)
     );
+    
+    if( id == null ) {
+      this._isLoading = false;
+      notifyListeners();
+      return;
+    }
     
     medication.id = id;
     this._isLoading = false;
@@ -40,14 +46,15 @@ class LocalMedicationProvider with
 
   // get all
   void all() async {
+    print(' med Future<List<Medication>> all() async');
     this._isLoading = true;
     notifyListeners();
-
+print('_isLoading 1 $_isLoading');
     List<Medication> medicatns = await _localMedicationService.all();
-    
+print('_isLoading 2 $_isLoading');    
     this._isLoading = false;
     this._medications = medicatns;
-    
+print('_isLoading 3 $_isLoading');    
     notifyListeners();
   }// void all() async { .. }
 

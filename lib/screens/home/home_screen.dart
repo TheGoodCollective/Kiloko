@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:kiloko/config/app_routes.dart';
 import 'package:kiloko/config/app_utils.dart';
+import 'package:kiloko/providers/local_account_provider.dart';
 import 'package:kiloko/screens/home/home_drawer.dart';
 import 'package:latlong/latlong.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -75,7 +77,16 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       
-      drawer: HomeDrawer(screenSize: screenSize, navigateTo: this._goTo),
+      drawer: Consumer<LocalAccountProvider> (
+        builder: (BuildContext ctx, LocalAccountProvider _lAccount, _) {
+
+          return HomeDrawer(
+            screenSize: screenSize, 
+            navigateTo: this._goTo,
+            account: _lAccount.account
+          );
+        },
+      ),
 
     );
   }// Widget build(BuildContext context) { .. }
@@ -148,6 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }// void _goToAccount() { .. }
 
   void _goTo({ String route }) {
+    Navigator.of(context).pop();
     Navigator.of(context).pushNamed(route);
   }// void goTo({ String route }) { .. }
 

@@ -25,6 +25,7 @@ class LocalAccountProvider with ChangeNotifier {
 
     try {
       String kilokoID = sharedPreferences.getString(SharedPreferenceVars.kilokoID);
+      print('Future<Account> _getAccount() $kilokoID');
       this._account = Account(kilokoID: kilokoID);
     } catch (e) {
     }

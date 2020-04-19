@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:kiloko/config/app_routes.dart';
 import 'package:kiloko/config/app_utils.dart';
+import 'package:kiloko/models/account.dart';
 
 
 class HomeDrawer extends StatelessWidget {
   final Size screenSize;
   final Function navigateTo;
+  final Account account;
   
-  HomeDrawer({ @required this.screenSize, this.navigateTo });
+  HomeDrawer({ @required this.screenSize, this.navigateTo, this.account });
 
 
   @override
@@ -51,10 +53,10 @@ class HomeDrawer extends StatelessWidget {
                     ),
                     Center(
                       child: Text(
-                        'x4D4v0gKtYH',
+                        account.kilokoID,
                         style: Theme.of(context).textTheme.body1.copyWith(
                           color: AppColors.sucsess
-                        )
+                        ),
                       ),
                     ),
 
