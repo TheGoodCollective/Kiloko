@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kiloko/config/app_utils.dart';
 import 'package:kiloko/models/condition.dart';
-import 'package:kiloko/models/medication.dart';
-import 'package:kiloko/screens/my_conditions/my_condition_card.dart';
+import 'package:kiloko/providers/local_condition_provider.dart';
+import 'package:kiloko/screens/my_conditions/add_condition_widget.dart';
+import 'package:kiloko/screens/my_conditions/conditions_list_widget.dart';
+import 'package:kiloko/screens/my_conditions/no_conditions_widget.dart';
 import 'package:kiloko/widgets/app_scaffold.dart';
+import 'package:provider/provider.dart';
 
 class MyConditionsScreen extends StatefulWidget {
   @override
@@ -11,33 +13,12 @@ class MyConditionsScreen extends StatefulWidget {
 }
 
 class _MyConditionsScreenState extends State<MyConditionsScreen> {
-  // List<Condition> _conditions = [];
-  List<Condition> _conditions = [
-    Condition(
-      name: 'malaria',
-      medications: [
-        Medication(name: 'brufen'),
-        Medication(name: 'chlorosth'),
-        Medication(name: 'chlorosth 1'),
-        Medication(name: 'chlorosth 2'),
-      ],
-      fromWhen: DateTime.now().subtract(Duration(days: 10)),
-      // toWhen: DateTime.now().subtract(Duration(days: 1)),
-    ),
-    Condition(
-      name: 'insomnia',
-      medications: [
-        Medication(name: 'brufen'),
-        Medication(name: 'piriton'),
-      ],
-      fromWhen: DateTime.now().subtract(Duration(days: 6)),
-      toWhen: DateTime.now().subtract(Duration(days: 4)),
-    ),
-  ];
+  LocalConditionProvider _localConditionProvider;
   
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
+    _localConditionProvider = Provider.of<LocalConditionProvider>(context, listen: false);
 
     return Scaffold(
 
@@ -49,9 +30,20 @@ class _MyConditionsScreenState extends State<MyConditionsScreen> {
       body: AppScaffold(
         children: <Widget>[
           
-          _conditions.length > 0 
-            ? _buildConditionsList(context: context)
-            : _buildNoConditionsList(context: context),
+          Consumer<LocalConditionProvider> (
+            builder: (BuildContext ctx, LocalConditionProvider conditionProvider, _) {
+
+              return conditionProvider.conditions.length > 0 
+                ? ConditionsListWidget(
+                  conditions: conditionProvider.conditions,
+                  deleteCondition: this._deleteCondition,
+                )
+                : NoConditionsWidget(
+                  goViewWhy: this._goViewWhy,
+                );
+
+            },
+          ),
 
 
         ],
@@ -66,111 +58,8 @@ class _MyConditionsScreenState extends State<MyConditionsScreen> {
       
     );
   }// Widget build(BuildContext context) { .. }
+
   
-
-  Widget _buildConditionsList({ BuildContext context }) {
-    Size screenSize = MediaQuery.of(context).size;
-
-    return Container(
-      padding: EdgeInsets.only(left: 16, right: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          
-          SizedBox(height: 40,),
-                                        
-          // Text(
-          //   'Conditions I currently have',
-          //   style: Theme.of(context).textTheme.subhead,
-          // ),
-
-          // SizedBox(height: 24,),
-              
-          ..._conditions.map((Condition cond) {
-
-            return MyConditionCard(
-              condition: cond,
-              onTap: () {},
-              deleteCallBack: this._deleteCondition,
-              showDeleteIcon: true,
-            );
-          }).toList(),
-
-        ],
-      ),
-    );
-  }// Widget _buildConditionsList({ BuildContext context }) { .. }
-
-  // show when user has no conditions
-  Widget _buildNoConditionsList({ BuildContext context }) {
-    Size screenSize = MediaQuery.of(context).size;
-
-    return Container(
-      padding: EdgeInsets.only(left: 16, right: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-
-          SizedBox(height: screenSize.height/8),
-          
-          Center(
-            child: CircleAvatar(
-              radius: screenSize.width/6,
-              backgroundImage: AssetImage(AppImages.corona),
-            ),
-          ),
-
-          SizedBox(height: 56,),
-
-          Center(
-            child: Text(
-              'No Conditions',
-              style: Theme.of(context).textTheme.title,
-            ),
-          ),
-
-          SizedBox(height: 32,),
-          
-          Text(
-            'Incase you have any conditions, click below button to add it. Your conditions will appear here',
-            style: Theme.of(context).textTheme.body2,
-            textAlign: TextAlign.center,
-          ),
- 
-          SizedBox(height: 80,),
-          
-          GestureDetector(
-
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                
-                Icon(
-                  Icons.info,
-                  color: AppColors.primary,
-                ),
-
-                SizedBox(width: 8,),
-                
-                Text(
-                  'Why should I add',
-                  style: Theme.of(context).textTheme.body1.copyWith(
-                    color: AppColors.primary,
-                  )
-                ),
-
-              ],
-            ),
-
-            onTap: this._goViewWhy,
-          ),
-
-        ],
-      ),
-    );
-  }// Widget _buildNoConditionsList({ BuildContext context }) { .. }
-
-
 
 
   /*
@@ -183,11 +72,21 @@ class _MyConditionsScreenState extends State<MyConditionsScreen> {
   }// void _goViewWhy() { .. }
   
   bool _deleteCondition({ Condition condition }) {
-
+    _localConditionProvider.delete(condition: condition);
   }// bool _deleteCondition({ Condition condition }) { .. }
   
   void _goAddCondition() {
-
+    showDialog(
+      context: context,
+      builder: (BuildContext ctx)=> Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: SingleChildScrollView(
+          child: AddConditionWidget(),
+        ),
+      ),
+    );
   }// void _goAddCondition() { .. }
 
 }
