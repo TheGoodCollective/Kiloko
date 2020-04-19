@@ -13,23 +13,23 @@ class KilokoAuthToken {
 
   // check if token expired
   bool isExpired(){
+    if( this.expiresAt == null ) return true;
     return DateTime.now().isAfter(this.expiresAt);
   }
 }
 
 class Account {
-  String id;
+  int id;
   String name;
   String password;
   String phone;
   int nationalID;
-  String kilokoID;
-  String joinedOn;
+  int kilokoID;
+  DateTime joinedOn;
   KilokoAuthToken kilokoAuthToken;
   List<Condition> conditions = [];
   List<Medication> medications = [];
-
-  double isSynced;
+  bool isSynced;
   String cloudID;
 
   Account({
@@ -46,4 +46,14 @@ class Account {
     this.isSynced,
     this.cloudID,
   });
+
+  String toString() {
+    return '''
+      id is ${this.id} name ${this.name} nationalID ${this.nationalID}
+      isSynced ${isSynced} kilokoID ${this.kilokoID}
+    ''';
+  }// String toString() { .. } 
+
+  bool get isAuthenticated=> !this.kilokoAuthToken.isExpired();
+
 }
