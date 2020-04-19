@@ -34,5 +34,9 @@ class LocalAccountProvider with ChangeNotifier {
   Future<void> deleteAccount() async {
     await _localAccountService.deleteAccount();
   }// Future<void> deleteAccount({ Acccount acccount }) { .. }
+  
+  Future<void> setIsSynced({ @required bool isSynced }) async {
+    await _localAccountService.setIsSynced(isSynced: isSynced);
+  }// Future<void> setIsSynced({ @required bool isSynced }) { .. }
 
 }

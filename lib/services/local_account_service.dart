@@ -14,11 +14,11 @@ class LocalAccountService {
   static Future<void> newAccount() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    String kilokoID = UtilsService.generateCode(length: 9);
+    String kilokoID = UtilsService.generateCode();
     
-    String existingCode = sharedPreferences.getString(SharedPreferenceVars.kilokoID);
+    int existingKilokoID = sharedPreferences.getInt(SharedPreferenceVars.kilokoID);
     
-    if( existingCode == null ) {
+    if( existingKilokoID == null ) {
       await sharedPreferences.setInt(
         SharedPreferenceVars.kilokoID, int.parse(kilokoID)
       );
@@ -165,7 +165,7 @@ class LocalAccountService {
     return saved;
   }// Future<void> saveAccount({ Account account }) async{ .. }
   
-  
+
   // delete account from shared preferences
   Future<void> deleteAccount() async{
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -191,13 +191,13 @@ class LocalAccountService {
   }// Future<void> deleteAccount() async{ .. }
   
 
-  Future<void> hasSynced() async {
+  Future<void> setIsSynced({ @required bool isSynced }) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     bool saved = false;
 
     try {
       saved = await sharedPreferences.setBool(
-        SharedPreferenceVars.isSynced, true);
+        SharedPreferenceVars.isSynced, isSynced);
     } catch(e) { }
     
     return saved;
