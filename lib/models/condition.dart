@@ -31,23 +31,33 @@ class Condition {
     return Condition(
       id: condition['id'],
       name: condition['name'],
-      fromWhen: condition['fromWhen'],
-      toWhen: condition['toWhen'],
+      fromWhen: condition['fromWhen'] != null 
+                  ? DateTime.parse(condition['fromWhen']) : null,
+      toWhen: condition['toWhen'] != null 
+                ? DateTime.parse(condition['toWhen']) : null,
       isSynced: condition['isSynced'],
       cloudID: condition['cloudID'],
+      medications: condition['medications'].toString()
+                    .split('@').map((String med) {
+                      return Medication(name: med);
+                    }).toList(),
     );
   }// static Condition fromMap({ Map<String, dynamic> condition }) { .. }
  
 
   static Map<String, dynamic> toMap({ Condition condition }) {
+    List<String> medicationNames = condition.medications.map((Medication med)=> med.name).toList();
 
     return {
       'id': condition.id,
       'name': condition.name,
-      'fromWhen': condition.fromWhen,
-      'toWhen': condition.toWhen,
+      'fromWhen': condition.fromWhen != null 
+                   ? condition.fromWhen.toString() : null,
+      'toWhen': condition.toWhen != null 
+                   ? condition.toWhen.toString() : null,
       'isSynced': condition.isSynced,
       'cloudID': condition.cloudID,
+      'medications': medicationNames.join('@')
     };
   }// static Map<String, dynamic> toMap({ Condition condition }) { .. }
 
