@@ -23,6 +23,8 @@ class LocalConditionService {
 
   // add 
   Future<int> add({Map<String, dynamic> condition}) async {
+    if(_dbService == null) { await _getConnection(); }
+
     int id = await _dbService.insert(_table, condition);
     return id;
   }// Future<int> add({Map<String, dynamic> loc}) async { .. }
@@ -30,6 +32,8 @@ class LocalConditionService {
 
   // update sync status
   Future<void> update({ Map<String, dynamic> condition }) async {
+    if(_dbService == null) { await _getConnection(); }
+
     await _dbService.update(
       _table, condition, 
       where: "id = ?", whereArgs: [ condition['id'] ]
@@ -39,6 +43,8 @@ class LocalConditionService {
 
   // get all
   Future<List<Condition>> all() async {
+    if(_dbService == null) { await _getConnection(); }
+
     List<Condition> conditions = [];
     List<Map<String, dynamic>> conditionRes = await _dbService.query(_table);
 
@@ -53,6 +59,8 @@ class LocalConditionService {
 
   // get all by synced
   Future<List<Condition>> allSyncIs({ @required bool syncStatus }) async {
+    if(_dbService == null) { await _getConnection(); }
+
     List<Condition> conditions = [];
     List<Map<String, dynamic>> conditionsRes = await _dbService.query(
       _table, where: "isSynced = ?", whereArgs: [ syncStatus ]
@@ -68,6 +76,8 @@ class LocalConditionService {
 
   
   Future<void> delete({ Condition condition }) async {
+    if(_dbService == null) { await _getConnection(); }
+    
     await _dbService.delete(
       _table, where: "id = ?", whereArgs: [ condition.id ]
     );
