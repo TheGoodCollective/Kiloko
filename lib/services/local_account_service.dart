@@ -48,7 +48,7 @@ class LocalAccountService {
       String phone = sharedPreferences.getString(SharedPreferenceVars.accountPhone);
       int nationalID = sharedPreferences.getInt(SharedPreferenceVars.accountNationalID);
       String joinedOn = sharedPreferences.getString(SharedPreferenceVars.accountJoinedOn);
-      int accountID = sharedPreferences.getInt(SharedPreferenceVars.accountID);
+      String accountID = sharedPreferences.getString(SharedPreferenceVars.accountID);
             
       account = Account(
         kilokoID: kilokoID,
@@ -136,7 +136,7 @@ class LocalAccountService {
 
     try {
       
-      await sharedPreferences.setInt(
+      await sharedPreferences.setString(
         SharedPreferenceVars.accountID, account.id
       );  
       await sharedPreferences.setInt(
