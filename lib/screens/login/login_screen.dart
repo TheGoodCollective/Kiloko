@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:kiloko/config/app_routes.dart';
+import 'package:kiloko/config/app_utils.dart';
+import 'package:kiloko/providers/account_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:kiloko/models/account.dart';
-// import 'package:kiloko/providers/account_provider.dart';
 import 'package:kiloko/widgets/app_scaffold.dart';
-import 'package:validators/validators.dart' as Validators;
 import 'package:kiloko/widgets/success_or_fail_screen.dart';
 
 
@@ -18,15 +19,15 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _isLoginSuccessful = false;
+  bool _isLoginSuccessful;
   Account _account = new Account();
   bool _showPassword = false;
-  // AccountProvider _accountProvider;
+  AccountProvider _accountProvider;
 
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
-    // _accountProvider = Provider.of<AccountProvider>(context, listen: false);
+    _accountProvider = Provider.of<AccountProvider>(context, listen: false);
 
     return Scaffold(
       
@@ -39,41 +40,62 @@ class _LoginScreenState extends State<LoginScreen> {
 
         children: <Widget>[
 
-          this._isLoginSuccessful == false
+          this._isLoginSuccessful == null
             ?
-            buildForm(context: context)
+            Consumer<AccountProvider> (
+              builder: (BuildContext ctx, AccountProvider accountProvidr, _) {
+
+                return buildForm(
+                  context: context,
+                  account: accountProvidr.account,
+                );
+              },
+            )
             :
             SuccessOrFailScreen(
               isSuccess: true,
-              cta: RaisedButton(
-                onPressed: this._goBack,
-                child: Text('Proceed'),
+              cta: Container(
+                width: screenSize.width/3,
+                child: RaisedButton(
+                  onPressed: ()=> this._goBack(context: context),
+                  child: Text(
+                    'Proceed',
+                    style: Theme.of(context).textTheme.subhead.copyWith(
+                      fontSize: 20
+                    ),
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                ),
               ),
-              assetPath: 'assets/images/404.jpg',
-              wooShortText: 'You have successful',
-              wooText: 'Build your little hollywood dream with VIDA',
+              assetPath: 'assets/images/one.jpg',
+              wooShortText: 'Login successful',
+              wooText: 'You have now joined the global move to eradicate the Covid-19 pandemic.',
             )
             
         ],
 
       ),
       
-      floatingActionButton:  Container(
-          margin: EdgeInsets.only(top: 16),
-          child: FlatButton(
-            child: Text(
-              'Don\'t have an account? Create one here.',
-              style: TextStyle(
-                fontSize: 18,
+      floatingActionButton: 
+        this._isLoginSuccessful == null || this._isLoginSuccessful == false
+          ? 
+          Container(
+            margin: EdgeInsets.only(top: 16),
+            child: FlatButton(
+              child: Text(
+                'Don\'t have an account? Create one here.',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+              onPressed: ()=> this._goRegister(context: context),
+              textColor: Colors.cyan,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
               ),
             ),
-            onPressed: ()=> this._goRegister(context: context),
-            textColor: Colors.cyan,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
-            ),
-          ),
-      ),
+          ) 
+          : Container(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
@@ -81,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
   
   
   // login
-  Widget buildForm({ BuildContext context }) {
+  Widget buildForm({ @required Account account, @required BuildContext context }) {
     Size screenSize = MediaQuery.of(context).size;
 
     return Column(
@@ -108,6 +130,42 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 SizedBox(height: 56),
 
+                Center(
+                  child: Text(
+                    'Kiloko ID',
+                    style: Theme.of(context).textTheme.title.copyWith(
+                      fontWeight: FontWeight.w800
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 10,),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+
+                    Icon(
+                      Icons.security,
+                      color: AppColors.primary,
+                      size: 32,
+                    ),
+                    SizedBox(width: 8,),
+
+                    Text(
+                      account.kilokoID.toString(),
+                      style: Theme.of(context).textTheme.subhead.copyWith(
+                        color: AppColors.primary,
+                        fontSize: 28,
+                        fontWeight: FontWeight.w600
+                      ),
+                    ),
+
+                  ],
+                ),
+                
+                SizedBox(height: 28,),
+
                 // form
                 Form(
                   key: _formKey,
@@ -129,8 +187,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
                         ),
+                        style: Theme.of(context).textTheme.body1,
                         validator: this._kilokoIDValidator,
-                        onSaved: (String val)=> this._account.kilokoID = int.parse(val),
+                        onSaved: (String val)=> this._account.email = val,
                       ),
 
                       SizedBox(height: 28),
@@ -156,6 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
                         ),
+                        style: Theme.of(context).textTheme.body1,
                         validator: this._passwordValidator,
                         onSaved: (String val)=> this._account.password = val,
                       ),
@@ -210,6 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _login() async {
     print('login');
+    setState(()=> this._isLoginSuccessful = null);
     
     if( this._formKey.currentState.validate() ) { print('form is valid');
       this._formKey.currentState.save();
@@ -217,17 +278,20 @@ class _LoginScreenState extends State<LoginScreen> {
       return; 
     }
 
-    print('email ${this._account.kilokoID}');
+    print('email ${this._account.email}');
     print('password ${this._account.password}');
-    // Account accnt = await this._accountProvider.loginWithEmailAndPassword(account: this._account);
-    // if( accnt != null ) {
-    //   this.setState(()=> this._isLoginSuccessful = true );
-    //   return;
-    // }
+    this._account.kilokoID = this._accountProvider.account.kilokoID;
+    Account accnt = await _accountProvider.login( account: this._account );
+    
+    if( accnt != null ) {
+      this.setState(()=> this._isLoginSuccessful = true );
+      return;
+    }
+    this.setState(()=> this._isLoginSuccessful = false );
   }// void _login() { .. }
 
   void _goRegister({ BuildContext context }) {
-    Navigator.of(context).pushNamed('/register', arguments: widget.from);
+    Navigator.of(context).pushNamed(AppRoutes.REGISTER);
   }// void _goRegister({ BuildContext context }) { .. }
   
   void _goBack({ BuildContext context }) {
@@ -236,7 +300,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
    
   /*
-   * data validators
+   ** data validators
    */
   String _kilokoIDValidator(String val) {
     val = val.trim();
