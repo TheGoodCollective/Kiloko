@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "118469266787",
+    "firebase_url": "https://kiloko.firebaseio.com",
+    "project_id": "kiloko",
+    "storage_bucket": "kiloko.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118469266787:android:45f9e83b00d445880cd756",
+        "android_client_info": {
+          "package_name": "com.kiloko.kiloko"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "118469266787-a3mcndneit3e1itfjvt382v0n1gu30p9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAc9n8FOPmCXp28AlkhKo_uZyDfPimTd80"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "118469266787-a3mcndneit3e1itfjvt382v0n1gu30p9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
