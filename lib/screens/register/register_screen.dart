@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kiloko/config/app_routes.dart';
+import 'package:kiloko/config/app_utils.dart';
+import 'package:kiloko/providers/account_provider.dart';
+import 'package:kiloko/services/account_service.dart';
 import 'package:provider/provider.dart';
 import 'package:kiloko/models/account.dart';
-// import 'package:vida/providers/account_provider.dart';
 import 'package:kiloko/widgets/app_scaffold.dart';
 import 'package:validators/validators.dart' as Validators;
 import 'package:regexed_validator/regexed_validator.dart' as RValidator;
@@ -23,12 +25,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _isRegisterSuccessful = false;
   Account _account = new Account();
   bool _showPassword = false;
-  // AccountProvider _accountProvider;
+  AccountProvider _accountProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    // this._gtD();
+  }
+
+  // _gtD() async {
+  //   AccountService accountService = AccountService();
+  //   Account acc = await accountService.getUserDetails(account: Account(id: 'kJhP2EwlPgQd1daJkmkLAjLLWAn1'));
+  //   print('_gtD got user');
+  //   print(acc);
+  // }
   
   @override
   Widget build(BuildContext context) {
-    Size screenSize = MediaQuery.of(context).size;
-    // _accountProvider = Provider.of<AccountProvider>(context, listen: false);
+    _accountProvider = Provider.of<AccountProvider>(context, listen: false);
 
     return Scaffold(
       
@@ -43,81 +57,121 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
           this._isRegisterSuccessful == false
             ?
-            buildForm(context: context)
+            Consumer<AccountProvider> (
+              builder: (BuildContext ctx, AccountProvider accountProvdr, _) {
+
+                return buildForm(
+                  context: context, account: accountProvdr.account
+                );
+              },
+            )
             :
-            SuccessOrFailScreen(
-              wooShortText: 'Account Created',
-              wooText: 'Welcome to Kiloko. You just joined the global movement to save earth',
-              isSuccess: true,
-              cta: RaisedButton(
-                onPressed: this._goBack,
-                child: Text('Proceed'),
-              ),
-              assetPath: 'assets/images/one.jpg',
-              extraWidget: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  
-                  Text(
-                    'Your privacy is guaranteed. People only know you by your kiloko ID',
-                    style: Theme.of(context).textTheme.body1,
-                    textAlign: TextAlign.center,
-                  ),
-                  
-                  SizedBox(height: 16),
-
-                  Text(
-                    'Finish your profile by adding any conditions or medications you are taking',
-                    style: Theme.of(context).textTheme.body1,
-                    textAlign: TextAlign.center,
-                  ),
-
-                  FloatingActionButton.extended(
-                    label: Text(
-                      'Add Medications and Conditions',
-                    ),
-                    onPressed: ()=> this._goAddMedicationsAndConditions(context: context),
-                  )
-
-                ],
-              ),
-            ),
+            _buildSuccessWidget(context: context)
 
         ],
 
       ),
       
-      floatingActionButton:  Container(
-          margin: EdgeInsets.only(top: 16),
-          child: FlatButton(
-            child: Text(
-              'Already have an account? Login here.',
-              style: TextStyle(
-                fontSize: 18,
+      floatingActionButton: 
+        this._isRegisterSuccessful == null || this._isRegisterSuccessful == false 
+          ? Container(
+            margin: EdgeInsets.only(top: 16),
+            child: FlatButton(
+              child: Text(
+                'Already have an account? Login here.',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
               ),
+              onPressed: ()=> this._goLogin(context: context),
+              textColor: Colors.cyan,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+              padding: EdgeInsets.symmetric(vertical: 8),
             ),
-            onPressed: ()=> this._goLogin(context: context),
-            textColor: Colors.cyan,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
-            ),
-          ),
-      ),
+          ) : Container(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
+  Widget _buildSuccessWidget({ @required BuildContext context }) {
+    Size screenSize = MediaQuery.of(context).size;
 
+    return SuccessOrFailScreen(
+      wooShortText: 'Account Created',
+      wooText: 'Welcome to Kiloko. You just joined the global movement to save earth',
+      isSuccess: true,
+      cta: Container(
+        width: screenSize.width/4,
+        child: OutlineButton(
+          onPressed: ()=> this._goBack(context: context),
+          child: Text('Proceed'),
+          borderSide: BorderSide(
+            color: AppColors.secondary
+          ),
+          textColor: AppColors.primary,
+          padding: EdgeInsets.symmetric(vertical: 8),
+        ),
+      ),
+      assetPath: 'assets/images/one.jpg',
+      extraWidget: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+
+          SizedBox(height: 40,),
+          
+          Center(
+            child: Text(
+              'Your privacy is guaranteed. People only know you by your Kiloko ID',
+              style: Theme.of(context).textTheme.body1.copyWith(
+                fontSize: 18
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          
+          SizedBox(height: 16),
+
+          Center(
+            child: Text(
+              'Finish your profile by adding any conditions or medications you are taking',
+              style: Theme.of(context).textTheme.body1.copyWith(
+                fontSize: 18
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+
+          SizedBox(height: 24,),
+
+          Center(
+            child: FloatingActionButton.extended(
+              label: Text(
+                'Add Medications and Conditions',
+                style: Theme.of(context).textTheme.body1.copyWith(
+                  fontSize: 16
+                ),
+              ),
+              onPressed: ()=> this._goAddMedicationsAndConditions(context: context),
+            ),
+          )
+
+        ],
+      ),
+    );
+  }// Widget _buildSuccessWidget({ BuildContext context }) { .. }
   
   // build the form
-  Widget buildForm({ BuildContext context}) {
+  Widget buildForm({ 
+    @required Account account, @required BuildContext context}) {
     Size screenSize = MediaQuery.of(context).size;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
 
-        SizedBox(height: screenSize.height/6),
+        SizedBox(height: screenSize.height/16),
 
         Container(
           padding: EdgeInsets.symmetric(horizontal: screenSize.width/8),
@@ -143,7 +197,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    
+
+                    Center(
+                      child: Text(
+                        'Kiloko ID',
+                        style: Theme.of(context).textTheme.title.copyWith(
+                          fontWeight: FontWeight.w800
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 10,),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+
+                        Icon(
+                          Icons.security,
+                          color: AppColors.primary,
+                          size: 32,
+                        ),
+                        SizedBox(width: 8,),
+
+                        Text(
+                          account.kilokoID.toString(),
+                          style: Theme.of(context).textTheme.subhead.copyWith(
+                            color: AppColors.primary,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w600
+                          ),
+                        ),
+
+                      ],
+                    ),
+                                    
+                    SizedBox(height: 28,),
+
                     // name
                     TextFormField(
                       keyboardType: TextInputType.text,
@@ -158,8 +248,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
                       ),
+                      style: Theme.of(context).textTheme.body1,
                       validator: this._nameValidator,
                       onSaved: (String val)=> this._account.name = val,
+                    ),
+                    
+                    SizedBox(height: 28),
+                    // email
+                    TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      autofocus: false,
+                      decoration: InputDecoration(
+                        labelText: 'Enter you email',
+                        prefixIcon: Icon(Icons.email),
+                        hintText: 'kellyanton@kiloko.com',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(48.0),
+                          borderSide: BorderSide(),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                      ),
+                      style: Theme.of(context).textTheme.body1,
+                      validator: this._emailValidator,
+                      onSaved: (String val)=> this._account.email = val,
                     ),
                     
                     SizedBox(height: 28),
@@ -178,30 +289,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
                       ),
+                      style: Theme.of(context).textTheme.body1,
                       validator: this._phoneValidator,
                       onSaved: (String val)=> this._account.phone = val,
                     ),
-                    
+                                       
                     SizedBox(height: 28),
                     
-                    // kiloko id
+                    Padding(
+                      padding: EdgeInsets.only(left: 12),
+                      child: Text(
+                        'Optional',
+                        style: Theme.of(context).textTheme.body1.copyWith(
+                          fontSize: 14,
+                          color: AppColors.error,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 8,),
+                    // national id
                     TextFormField(
-                      keyboardType: TextInputType.text,
+                      keyboardType: TextInputType.number,
                       autofocus: false,
                       decoration: InputDecoration(
-                        labelText: 'Enter you kiloko ID',
-                        prefixIcon: Icon(Icons.alternate_email),
-                        hintText: 'ki-SfweFwefweF',
+                        labelText: 'Enter you national id',
+                        prefixIcon: Icon(Icons.credit_card),
+                        hintText: '588610100',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(48.0),
                           borderSide: BorderSide(),
                         ),
                         contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
                       ),
-                      validator: this._kilokoIDValidator,
-                      onSaved: (String val)=> this._account.kilokoID = int.parse(val),
+                      style: Theme.of(context).textTheme.body1,
+                      validator: this._nationalIDValidator,
+                      onSaved: (String val)=> this._account.nationalID = val,
                     ),
-
+                                       
                     SizedBox(height: 28),
 
                     // password
@@ -225,10 +349,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
                       ),
+                      style: Theme.of(context).textTheme.body1,
                       validator: this._passwordValidator,
                       onSaved: (String val)=> this._account.password = val,
                     ),
-
 
                     SizedBox(height: 56),
 
@@ -246,6 +370,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   fontSize: 18,
                                 ),
                               ),
+                              padding: EdgeInsets.symmetric(vertical: 8),
                               onPressed: this._register,
                               
                               elevation: 4,
@@ -286,23 +411,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return; 
     }
 
-    print('email ${this._account.kilokoID}');
+    print('email ${this._accountProvider.account.kilokoID}');
     print('password ${this._account.password}');
-    // Account accnt = await this._accountProvider.registerWithEmailAndPassword(account: this._account);
+    this._account.kilokoID = this._accountProvider.account.kilokoID;
+    Account accnt = await this._accountProvider.register(
+      account: this._account);
 
-    // if( accnt == null ) {
-    //   print('an error occured _register');
-    // } else {
-    //   print('account created ');
-    //   print(accnt);
-    // }
-    // if( accnt != null ) {
-    //   setState(()=> this._isRegisterSuccessful = true );
-    // } 
+    if( accnt == null ) {
+      print('an error occured _register');
+    } else {
+      print('account created ');
+      print(accnt);
+    }
+    if( accnt != null ) {
+      setState(()=> this._isRegisterSuccessful = true );
+      return;
+    } 
+    setState(()=> this._isRegisterSuccessful = false );
   }// void _register() { .. }
 
   void _goLogin({ BuildContext context }) {
-    Navigator.of(context).pushNamed(AppRoutes.LOGIN, arguments: widget.from);
+    Navigator.of(context).pushNamed(AppRoutes.LOGIN);
   }// void _goLogin({ BuildContext context }) { .. }
 
   void _goBack({ BuildContext context }) {
@@ -323,7 +452,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if( val.isEmpty ) return 'You should enter a name to proceed';
     if( val.length < 5 ) return 'Name should be atleast 5 characters long';
   }
-  String _kilokoIDValidator(String val) {
+  String _emailValidator(String val) {
     val = val.trim();
     if( val.isEmpty ) return 'You should enter an email to proceed';
     if( !Validators.isEmail(val) ) return 'Please enter a valid email';
@@ -340,6 +469,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if( val.length < 6 ) return 'Password should be atleast 6 characters long';
     if( !Validators.isAlphanumeric(val) ) return 'Password should contain atleast 1 letter and 1 number';
   }
-
+  
+  String _nationalIDValidator(String val) {
+    val = val.trim();
+    // if( val.isEmpty ) return 'You should enter a national id to proceed';
+    if( val.isNotEmpty && val.length < 6 ) return 'Your national id should be at least 6 numbers';
+    if( val.length > 0 && !Validators.isInt(val) ) return 'Please enter a valid national id';
+  }
+  
 
 }
