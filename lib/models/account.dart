@@ -22,8 +22,9 @@ class Account {
   String id;
   String name;
   String password;
+  String email;
   String phone;
-  int nationalID;
+  String nationalID;
   int kilokoID;
   DateTime joinedOn;
   KilokoAuthToken kilokoAuthToken;
@@ -36,6 +37,7 @@ class Account {
     this.id,
     this.name,
     this.password,
+    this.email,
     this.phone,
     this.nationalID,
     this.kilokoID,
@@ -60,24 +62,29 @@ class Account {
   // create an accountobject from account json data
   static Account fromJson({Map<String, dynamic> account}) {
     return new Account(
-      id: account['id'],
+      id: account['id'] ?? null,
+      cloudID: account['id'] ?? null,
       name: account['name'],
+      email: account['email'],
       phone: account['phone'].toString(),
       password: account['password'],
-      joinedOn: DateTime.parse(account['joined_on']),
-      nationalID: int.parse(account['nationalID']),
-      kilokoID: int.parse(account['nationalID']), 
+      joinedOn: DateTime.parse(account['joinedOn']),
+      nationalID: account['nationalID'] != null 
+                    ? account['nationalID'].toString()
+                    : null,
+      kilokoID: account['kilokoID'], 
     );
   }// static Account fromJson(Map<String, dynamic> accountJson) { .. }
 
   // convert an account to json
   static Map<String, dynamic> toJson({Account account}) {
     return { 
-      'id': account.id,
+      'id': account.id ?? null,
       'name': account.name, 
+      'email': account.email, 
       'phone': account.phone,
       'password': account.password, 
-      'joinedOn': account.password, 
+      'joinedOn': account.joinedOn != null ? account.joinedOn.toIso8601String() : null, 
       'nationalID': account.nationalID,
       'kilokoID': account.kilokoID, 
     };

@@ -33,11 +33,15 @@ class LocalAccountService {
 
     try {
       int kilokoID = sharedPreferences.getInt(SharedPreferenceVars.kilokoID);
-      print('Future<Account> getAccount() kilokoID $kilokoID');
+      print('in localaccountservice >> Future<Account> getAccount() kilokoID $kilokoID');
       
       bool isSynced = sharedPreferences.getBool(SharedPreferenceVars.isSynced) ?? false;
 
+      print('in localaccountservice >> isSynced $isSynced');
+
       if( kilokoID == null ) return Account();
+      print('in localaccountservice >> passed if( kilokoID == null ) return Account()');
+
       if( !isSynced ) {
         account = Account(kilokoID: kilokoID);
         return account;
@@ -46,7 +50,7 @@ class LocalAccountService {
       String cloudID = sharedPreferences.getString(SharedPreferenceVars.cloudID);
       String name = sharedPreferences.getString(SharedPreferenceVars.accountName);
       String phone = sharedPreferences.getString(SharedPreferenceVars.accountPhone);
-      int nationalID = sharedPreferences.getInt(SharedPreferenceVars.accountNationalID);
+      String nationalID = sharedPreferences.getString(SharedPreferenceVars.accountNationalID);
       String joinedOn = sharedPreferences.getString(SharedPreferenceVars.accountJoinedOn);
       String accountID = sharedPreferences.getString(SharedPreferenceVars.accountID);
             
@@ -60,6 +64,8 @@ class LocalAccountService {
         joinedOn: DateTime.parse(joinedOn),
         isSynced: isSynced,
       );
+      print('in localaccountservice >> account');
+      print(account);
 
     } catch (e) {
       print('error in servce get account ${e.toString()}');
@@ -144,15 +150,15 @@ class LocalAccountService {
       );  
       await sharedPreferences.setString(
         SharedPreferenceVars.cloudID, account.cloudID
-      );  
+      );
       await sharedPreferences.setString(
         SharedPreferenceVars.accountAccessToken, account.name
-      );  
+      );
       await sharedPreferences.setString(
         SharedPreferenceVars.accountPhone, account.phone.toString()
-      );  
-      await sharedPreferences.setInt(
-        SharedPreferenceVars.accountNationalID, account.nationalID
+      );
+      await sharedPreferences.getString(
+        SharedPreferenceVars.accountNationalID
       );  
       await sharedPreferences.setString(
         SharedPreferenceVars.accountJoinedOn, 

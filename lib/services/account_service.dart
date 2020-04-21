@@ -29,15 +29,15 @@ class AccountService {
 
 
   // register
-  Future<Account> register({ Account account }) async{
+  Future<void> register({ Account account }) async{
     try {
       await _firestore.collection('accounts')
-             .document(account.kilokoID.toString())
+             .document(account.id)
              .setData(Account.toJson(account: account));
-
-      account.cloudID = account.kilokoID.toString(); 
+ 
       return account;
     } catch(e) {
+      print('service >> Future<void> register({ Account account }) async{ error ${e.toString()}');
       return null;
     }
   }// Account register({ Account account }) { .. }
@@ -45,11 +45,11 @@ class AccountService {
   // login to firebase
   Future<Account> login({ Account account }) async{
     try {
-      AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(email: account.kilokoID.toString(), password: account.password);
+      AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(email: account.email, password: account.password);
 
       FirebaseUser user = result.user;
       return Account( 
-        kilokoID: int.parse(user.email), 
+        email: user.email, 
         password: account.password, 
         id: user.uid,
         cloudID: user.uid
@@ -62,7 +62,7 @@ class AccountService {
   // register
   Future<FirebaseUser> registerWithEmailAndPassword({ Account account }) async{
     try {
-      AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(email: account.kilokoID.toString(), password: account.password);
+      AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(email: account.email, password: account.password);
 
       FirebaseUser user = result.user; 
       return user;
@@ -70,6 +70,7 @@ class AccountService {
       //   email: user.email, password: account.password, id: user.uid,
       // );
     } catch(e) {
+      print('Future<FirebaseUser> registerWithEmailAndPassword({ Account account }) async{ ${e.toString()}');
       return null;
     }
   }// Account registerWithEmailAndPassword({ Account account }) { .. }
@@ -92,14 +93,23 @@ class AccountService {
 
   // get user details from server
   Future<Account> getUserDetails({ Account account }) async{
+    if( account == null || account.id == null ) return null;
 
     try{
-      DocumentSnapshot documentSnapshot = await _firestore.document(account.kilokoID.toString()).get();
-    
-      return Account.fromJson(account: documentSnapshot.data);
+      DocumentSnapshot documentSnapshot = await _firestore.collection('accounts').document(account.id).get();
+      
+      print('documentSnapshot data');
+      print(documentSnapshot.data);
+
+      if( documentSnapshot.exists ) {
+        Account acnt = Account.fromJson(account: documentSnapshot.data);
+        acnt.isSynced = true;
+        return acnt;
+      } 
+      
+      return null;
     } catch(e) {
       print('getUserDetails >> error');
-      print(e);
       print(e.toString());
       return null;
     }
